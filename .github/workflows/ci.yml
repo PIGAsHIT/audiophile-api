@@ -44,4 +44,4 @@ jobs:
     # 5. 執行測試
     - name: Run Tests with Pytest
       run: |
-        pytest
+        python -m pytest
