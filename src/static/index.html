@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audiophile Database | 專業耳機數據庫</title>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* 標題區 */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            color: #fff;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 輸入區 */
+        .search-box {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        input {
+            flex: 1;
+            background: #000;
+            border: 1px solid #333;
+            padding: 12px;
+            color: #fff;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #d4af37;
+        }
+
+        button {
+            background: #d4af37;
+            color: #000;
+            border: none;
+            padding: 0 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #e5c150;
+        }
+
+        button:disabled {
+            background: #444;
+            cursor: not-allowed;
+        }
+
+        /* 結果顯示區 (隱藏) */
+        #result-area {
+            display: none;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 1. 硬體規格卡片 */
+        .spec-card {
+            background: #1a1a1a;
+            margin-top: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #d4af37;
+            /* 金色邊條 */
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            /* 兩欄排版 */
+            gap: 15px;
+        }
+
+        .spec-item label {
+            display: block;
+            color: #666;
+            font-size: 0.8rem;
+            margin-bottom: 2px;
+        }
+
+        .spec-item span {
+            color: #fff;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .spec-full {
+            grid-column: span 2;
+        }
+
+        /* 佔滿整行 */
+
+        /* 2. 聲音特色標籤 */
+        .features {
+            margin-top: 20px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #333;
+            color: #d4af37;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #444;
+        }
+
+        /* 3. 歌曲與評論 */
+        .song-card {
+            background: linear-gradient(145deg, #1a1a1a, #222);
+            margin-top: 20px;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #333;
+        }
+
+        .song-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .cover-img {
+            width: 64px;
+            height: 64px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .song-info h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+
+        .song-info p {
+            margin: 4px 0 0;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .summary-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            color: #ccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>THE GOLDEN PROOF</h1>
+            <div class="subtitle">AI Powered Audiophile Database</div>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="brand" placeholder="品牌 (e.g. Sony)">
+            <input type="text" id="model" placeholder="型號 (e.g. IER-Z1R)">
+            <button onclick="analyze()" id="btn">分析</button>
+        </div>
+
+        <div id="result-area">
+            <div class="spec-card">
+                <div class="spec-item">
+                    <label>形式 Form Factor</label>
+                    <span id="spec-form">IEM</span>
+                </div>
+                <div class="spec-item">
+                    <label>連線 Connectivity</label>
+                    <span id="spec-conn">Wired</span>
+                </div>
+                <div class="spec-item">
+                    <label>年份 Year</label>
+                    <span id="spec-year">2019</span>
+                </div>
+                <div class="spec-item">
+                    <label>參考價位 Price</label>
+                    <span id="spec-price">$1,700</span>
+                </div>
+                <div class="spec-item spec-full">
+                    <label>單體配置 Driver Config</label>
+                    <span id="spec-driver" style="color: #fff;">1DD + 2BA Hybrid</span>
+                </div>
+            </div>
+
+            <div class="features" id="features-list"></div>
+
+            <div class="song-card">
+                <div class="summary-box" id="summary-text">
+                    正在生成專業評論...
+                </div>
+
+                <div class="song-header">
+                    <img id="cover-img" class="cover-img" src="" alt="cover">
+                    <div class="song-info">
+                        <h3 id="song-title">Song Name</h3>
+                        <p id="artist-name">Artist</p>
+                    </div>
+                </div>
+
+                <div id="spotify-embed"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function analyze() {
+            const brand = document.getElementById('brand').value;
+            const model = document.getElementById('model').value;
+            const btn = document.getElementById('btn');
+
+            if (!brand || !model) return alert("請輸入完整資訊");
+
+            btn.disabled = true;
+            btn.innerText = "分析中...";
+            document.getElementById('result-area').style.display = 'none';
+
+            try {
+                const res = await fetch('/recommend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ brand, model })
+                });
+
+                if (!res.ok) throw new Error("API Error");
+                const data = await res.json();
+
+                // 填寫規格
+                document.getElementById('spec-form').innerText = data.form_factor;
+                document.getElementById('spec-conn').innerText = data.connection;
+                document.getElementById('spec-year').innerText = data.release_year;
+                document.getElementById('spec-price').innerText = data.price_range;
+                document.getElementById('spec-driver').innerText = data.driver_config;
+
+                // 填寫特色
+                const tags = document.getElementById('features-list');
+                tags.innerHTML = data.sound_features.map(f => `<span class="tag">${f}</span>`).join('');
+
+                // 填寫歌曲與評論
+                document.getElementById('summary-text').innerText = data.comment;
+                document.getElementById('song-title').innerText = data.title;
+                document.getElementById('artist-name').innerText = data.artist;
+                document.getElementById('cover-img').src = data.cover_url;
+
+                // 嵌入播放器
+                document.getElementById('spotify-embed').innerHTML = `
+                <iframe style="border-radius:12px" 
+                src="https://open.spotify.com/embed/track/${data.track_id}?utm_source=generator&theme=0" 
+                width="100%" height="152" frameBorder="0" allowfullscreen="" 
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                loading="lazy"></iframe>
+            `;
+
+                document.getElementById('result-area').style.display = 'block';
+
+            } catch (e) {
+                alert("分析失敗，可能是型號太冷門或連線錯誤");
+                console.error(e);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "分析";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

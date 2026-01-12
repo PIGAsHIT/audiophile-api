@@ -1,0 +1,19 @@
+# .gitignore
+
+# Python 暫存檔
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 虛擬環境 (絕對不能上傳)
+venv/
+.env
+
+# 系統檔案
+.DS_Store
+Thumbs.db
+
+# Docker 相關
+.pytest_cache/
+.coverage
+htmlcov/

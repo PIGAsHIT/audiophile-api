@@ -1,0 +1,47 @@
+name: CI Pipeline
+
+# 觸發條件：當 Push 到 main 分支，或發起 Pull Request 時
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. 下載你的程式碼
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. 安裝 Python 3.10
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+
+    # 3. 安裝依賴套件
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest httpx
+
+    # 4. 建立一個假的 .env 檔
+    # 因為 .gitignore 擋住了 .env，但程式執行需要環境變數
+    # 我們這裡隨便填一些假資料，反正測試是用 SQLite，不會真的連 Gemini
+    - name: Create fake .env for testing
+      run: |
+        echo "DATABASE_URL=sqlite:///./test.db" >> .env
+        echo "SECRET_KEY=testing_secret" >> .env
+        echo "ALGORITHM=HS256" >> .env
+        echo "GEMINI_API_KEY=fake_key" >> .env
+        echo "SPOTIFY_CLIENT_ID=fake_id" >> .env
+        echo "SPOTIFY_CLIENT_SECRET=fake_secret" >> .env
+
+    # 5. 執行測試
+    - name: Run Tests with Pytest
+      run: |
+        pytest
