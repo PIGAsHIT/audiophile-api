@@ -1,23 +1,31 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 import os
 from dotenv import load_dotenv
 
+# 1. 載入 .env 變數
 load_dotenv()
 
-# 這裡會讀取 docker-compose.yml 傳進來的環境變數
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+# --- 關鍵修改 ---
+# 不要直接讀 DATABASE_URL (因為 .env 裡沒有這一行了)
+# 我們要用 f-string 把零散的變數組裝起來
+SQLALCHEMY_DATABASE_URL = (
+    f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+    f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+)
+# ----------------
 
-# 建立連線引擎
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+# 2. 建立 Engine
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
 
-# 建立 Session 工廠
+# 3. 建立 Session 工廠
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# 宣告基底
+# 4. 宣告 Base
 Base = declarative_base()
 
-# 依賴注入用：確保每次請求都有獨立的 DB 連線，且用完會關閉
+# 5. Dependency
 def get_db():
     db = SessionLocal()
     try:

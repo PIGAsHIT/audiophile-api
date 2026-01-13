@@ -1,19 +1,66 @@
-# .gitignore
-
-# Python 暫存檔
+# --- Python 基礎 ---
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# 虛擬環境 (絕對不能上傳)
+# --- 虛擬環境 ---
 venv/
+.venv/
+env/
+ENV/
+
+# --- 專案設定與密鑰 ---
 .env
+.env.*
+# 如果有 private key 也要加進來
+*.pem
+*.key
 
-# 系統檔案
-.DS_Store
-Thumbs.db
+# --- 資料庫與 Docker ---
+docker_data/
+postgres_data/
+mongo_data/
+redis_data/
 
-# Docker 相關
+# --- IDE 設定 (避免協作衝突) ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- 測試與覆蓋率報告 ---
 .pytest_cache/
 .coverage
 htmlcov/
+.mypy_cache/
+
+# --- 系統檔案 ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Terraform 產生的資料庫檔案 ---
+terraform/mongodata/
+terraform/pgdata/
+terraform/.mongodb/
+
+# --- Logs ---
+*.log
+logs/

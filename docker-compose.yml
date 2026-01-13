@@ -1,55 +1,38 @@
 version: '3.8'
 
 services:
-  # 1. 你的 Python App
-  backend:
-    build: .
-    container_name: audiophile_backend
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./src:/app/src  # ✨ 關鍵：讓你在本機改程式碼，Container 內會自動同步！
-    env_file:
-      - .env  # 讀取你的 API KEY
-    environment:
-      # 告訴 Python，資料庫都在這些 Container 裡
-      - DATABASE_URL=postgresql://user:password@db:5432/audiophile
-      - MONGO_URL=mongodb://mongo:27017/audiophile_db
-      - REDIS_URL=redis://redis:6379/0
-    depends_on:
-      - db
-      - mongo
-      - redis
-
-  # 2. PostgreSQL (存會員帳號)
+  # --- 關聯式資料庫 (PostgreSQL) ---
   db:
     image: postgres:15-alpine
     container_name: audiophile_postgres
+    restart: always
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: audiophile
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
-
-  # 3. MongoDB (存歌單與歷史)
-  mongo:
-    image: mongo:6.0
-    container_name: audiophile_mongo
     volumes:
-      - mongo_data:/data/db
-    ports:
-      - "27017:27017"
+      # 將資料持久化在專案目錄下的 docker_data/postgres
+      - ./docker_data/postgres:/var/lib/postgresql/data
 
-  # 4. Redis (快取與限流)
+  # --- 快取與佇列 (Redis) ---
   redis:
     image: redis:alpine
     container_name: audiophile_redis
+    restart: always
     ports:
       - "6379:6379"
 
-volumes:
-  postgres_data:
-  mongo_data:
+  # --- 文件資料庫 (MongoDB) ---
+  mongo:
+    image: mongo:latest
+    container_name: audiophile_mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./docker_data/mongo:/data/db

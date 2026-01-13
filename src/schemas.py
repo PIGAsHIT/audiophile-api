@@ -1,32 +1,57 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-# 輸入維持不變
+# --- 既有的耳機推薦 Schema ---
 class HeadphoneRequest(BaseModel):
     brand: str
     model: str
 
-# ✅ 輸出大升級：加入硬體規格 (Specs)
 class TrackRecommendation(BaseModel):
-    # 1. 硬體規格 (Specs)
-    form_factor: str      # 例如：入耳式 (IEM)
-    connection: str       # 例如：有線 (3.5mm/4.4mm)
-    release_year: str     # 例如：2019
-    price_range: str      # 例如：$1,600 USD
-    driver_config: str    # 例如：1圈2鐵 (1DD + 2BA)
+    # 硬體規格
+    form_factor: str
+    connection: str
+    release_year: str
+    price_range: str
+    driver_config: str
     
-    # 2. 聲音特色 (Sound)
-    sound_features: List[str] # 例如：["大編制", "高頻延伸"]
+    # 聲音特色
+    sound_features: List[str]
     
-    # 3. 推薦歌曲 (Song)
+    # 詳細分析
+    analysis_bass: str
+    analysis_mids: str
+    analysis_highs: str
+    listening_guide: str
+
+    # 歌曲資訊
     title: str
     artist: str
-    
-    # 4. 專業總結 (Summary)
-    comment: str          # 專業客觀的評價
-    
-    # 系統欄位 (Spotify)
+    comment: str
     cover_url: str
     spotify_url: str
     track_id: str
     preview_url: Optional[str] = None
+
+# --- 使用者驗證相關 Schema ---
+
+# 1. 註冊與登入用的 (接收帳密)
+class UserCreate(BaseModel):
+    email: str
+    password: str
+
+# 2. 回傳給前端的使用者資訊 (不包含密碼)
+class UserResponse(BaseModel):
+    id: int
+    email: str
+    is_active: bool
+
+    class Config:
+        from_attributes = True  # 讓 Pydantic 可以讀取 SQLAlchemy 物件
+
+# 3. Token 回傳格式
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    email: Optional[str] = None

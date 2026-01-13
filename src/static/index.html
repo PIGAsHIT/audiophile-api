@@ -4,101 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audiophile Database | 專業耳機數據庫</title>
+    <title>Audiophile Proof - 黑金版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            background-color: #0a0a0a;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-            margin: 0;
-            min-height: 100vh;
+        .gold-gradient {
+            background: linear-gradient(135deg, #d4af37 0%, #a88426 100%);
         }
 
-        .container {
-            width: 100%;
-            max-width: 600px;
+        .gold-text {
+            background: linear-gradient(to right, #fcd34d, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* 標題區 */
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
         }
 
-        h1 {
-            color: #fff;
-            font-weight: 300;
-            letter-spacing: 2px;
-            margin: 0;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* 輸入區 */
-        .search-box {
-            background: #1a1a1a;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            display: flex;
-            gap: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        input {
-            flex: 1;
-            background: #000;
-            border: 1px solid #333;
-            padding: 12px;
-            color: #fff;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #d4af37;
-        }
-
-        button {
-            background: #d4af37;
-            color: #000;
-            border: none;
-            padding: 0 20px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button:hover {
-            background: #e5c150;
-        }
-
-        button:disabled {
-            background: #444;
-            cursor: not-allowed;
-        }
-
-        /* 結果顯示區 (隱藏) */
-        #result-area {
-            display: none;
-            animation: slideUp 0.5s ease;
-        }
-
-        @keyframes slideUp {
+        @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(10px);
             }
 
             to {
@@ -106,222 +33,302 @@
                 transform: translateY(0);
             }
         }
-
-        /* 1. 硬體規格卡片 */
-        .spec-card {
-            background: #1a1a1a;
-            margin-top: 20px;
-            border-radius: 12px;
-            border-left: 4px solid #d4af37;
-            /* 金色邊條 */
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            /* 兩欄排版 */
-            gap: 15px;
-        }
-
-        .spec-item label {
-            display: block;
-            color: #666;
-            font-size: 0.8rem;
-            margin-bottom: 2px;
-        }
-
-        .spec-item span {
-            color: #fff;
-            font-weight: 500;
-            font-size: 1rem;
-        }
-
-        .spec-full {
-            grid-column: span 2;
-        }
-
-        /* 佔滿整行 */
-
-        /* 2. 聲音特色標籤 */
-        .features {
-            margin-top: 20px;
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            background: #333;
-            color: #d4af37;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            border: 1px solid #444;
-        }
-
-        /* 3. 歌曲與評論 */
-        .song-card {
-            background: linear-gradient(145deg, #1a1a1a, #222);
-            margin-top: 20px;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #333;
-        }
-
-        .song-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .cover-img {
-            width: 64px;
-            height: 64px;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .song-info h3 {
-            margin: 0;
-            color: #fff;
-            font-size: 1.1rem;
-        }
-
-        .song-info p {
-            margin: 4px 0 0;
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        .summary-box {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 8px;
-            color: #ccc;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-        }
     </style>
 </head>
 
-<body>
+<body class="bg-[#121212] text-gray-200 min-h-screen flex flex-col items-center py-10 font-sans">
 
-    <div class="container">
-        <div class="header">
-            <h1>THE GOLDEN PROOF</h1>
-            <div class="subtitle">AI Powered Audiophile Database</div>
+    <div class="w-full max-w-lg px-4 relative">
+        <h1 class="text-4xl font-extrabold text-center mb-8 tracking-widest uppercase">
+            <span class="gold-text">Audiophile</span> <span class="text-gray-600 text-2xl">Proof</span>
+        </h1>
+
+        <div id="nav-bar"
+            class="hidden flex justify-center space-x-6 mb-8 text-sm uppercase tracking-wide border-b border-gray-800 pb-4">
+            <button onclick="switchTab('search')" id="nav-search"
+                class="text-amber-500 font-bold transition">Search</button>
+            <button onclick="switchTab('history')" id="nav-history"
+                class="text-gray-500 hover:text-amber-500 transition">History</button>
+            <button onclick="switchTab('collection')" id="nav-collection"
+                class="text-gray-500 hover:text-amber-500 transition">Collection</button>
+            <button onclick="logout()" class="text-gray-600 hover:text-red-500 transition ml-4"><i
+                    class="fas fa-sign-out-alt"></i></button>
         </div>
 
-        <div class="search-box">
-            <input type="text" id="brand" placeholder="品牌 (e.g. Sony)">
-            <input type="text" id="model" placeholder="型號 (e.g. IER-Z1R)">
-            <button onclick="analyze()" id="btn">分析</button>
+        <div id="auth-section" class="bg-[#1e1e1e] border border-gray-800 p-8 shadow-2xl mb-6">
+            <h2 id="auth-title" class="text-xl font-light text-amber-500 mb-6 tracking-widest text-center">LOGIN</h2>
+            <input type="email" id="email" placeholder="Email"
+                class="w-full bg-[#121212] border border-gray-700 p-3 mb-3 text-white focus:border-amber-500 focus:outline-none">
+            <input type="password" id="password" placeholder="Password"
+                class="w-full bg-[#121212] border border-gray-700 p-3 mb-6 text-white focus:border-amber-500 focus:outline-none">
+            <button onclick="handleAuth()" id="auth-btn"
+                class="w-full gold-gradient text-black font-bold py-3 uppercase tracking-wider hover:opacity-90 transition">Login</button>
+            <p onclick="toggleAuthMode()" id="toggle-text"
+                class="text-center text-xs text-gray-500 mt-4 cursor-pointer hover:text-amber-500 transition">Create an
+                Account</p>
         </div>
 
-        <div id="result-area">
-            <div class="spec-card">
-                <div class="spec-item">
-                    <label>形式 Form Factor</label>
-                    <span id="spec-form">IEM</span>
+        <div id="search-view" class="hidden fade-in">
+            <div class="bg-[#1e1e1e] border border-gray-800 p-6 shadow-xl mb-6">
+                <div class="flex space-x-2 mb-4">
+                    <input type="text" id="brand" placeholder="Brand"
+                        class="w-1/2 bg-[#121212] border border-gray-700 p-3 text-white focus:border-amber-500 focus:outline-none">
+                    <input type="text" id="model" placeholder="Model"
+                        class="w-1/2 bg-[#121212] border border-gray-700 p-3 text-white focus:border-amber-500 focus:outline-none">
                 </div>
-                <div class="spec-item">
-                    <label>連線 Connectivity</label>
-                    <span id="spec-conn">Wired</span>
-                </div>
-                <div class="spec-item">
-                    <label>年份 Year</label>
-                    <span id="spec-year">2019</span>
-                </div>
-                <div class="spec-item">
-                    <label>參考價位 Price</label>
-                    <span id="spec-price">$1,700</span>
-                </div>
-                <div class="spec-item spec-full">
-                    <label>單體配置 Driver Config</label>
-                    <span id="spec-driver" style="color: #fff;">1DD + 2BA Hybrid</span>
-                </div>
+                <button onclick="getRecommendation()" id="search-btn"
+                    class="w-full border border-amber-600 text-amber-500 py-3 font-bold uppercase tracking-widest hover:bg-amber-600 hover:text-black transition">
+                    Analyze
+                </button>
             </div>
 
-            <div class="features" id="features-list"></div>
-
-            <div class="song-card">
-                <div class="summary-box" id="summary-text">
-                    正在生成專業評論...
-                </div>
-
-                <div class="song-header">
-                    <img id="cover-img" class="cover-img" src="" alt="cover">
-                    <div class="song-info">
-                        <h3 id="song-title">Song Name</h3>
-                        <p id="artist-name">Artist</p>
+            <div id="result-card" class="hidden bg-[#1e1e1e] border-t-4 border-amber-600 shadow-2xl relative fade-in">
+                <div class="relative">
+                    <img id="album-cover" src="" class="w-full h-80 object-cover opacity-80">
+                    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-[#1e1e1e] to-transparent h-32">
                     </div>
+                    <button onclick="toggleFavorite()" id="fav-btn"
+                        class="absolute top-4 right-4 bg-black/50 p-3 rounded-full text-2xl text-gray-400 hover:text-red-500 transition backdrop-blur-sm"><i
+                            class="fas fa-heart"></i></button>
                 </div>
-
-                <div id="spotify-embed"></div>
+                <div class="p-6 -mt-10 relative z-10">
+                    <h2 id="song-title" class="text-3xl font-bold text-white mb-1">Title</h2>
+                    <p id="artist-name" class="text-amber-500 text-lg mb-6 tracking-wide">Artist</p>
+                    <div class="space-y-4 mb-8">
+                        <div class="border-l-2 border-amber-600 pl-4">
+                            <h3 class="text-xs text-gray-500 uppercase">Bass</h3>
+                            <p id="an-bass" class="text-sm text-gray-300">...</p>
+                        </div>
+                        <div class="border-l-2 border-amber-600 pl-4">
+                            <h3 class="text-xs text-gray-500 uppercase">Mids</h3>
+                            <p id="an-mids" class="text-sm text-gray-300">...</p>
+                        </div>
+                        <div class="border-l-2 border-amber-600 pl-4">
+                            <h3 class="text-xs text-gray-500 uppercase">Highs</h3>
+                            <p id="an-highs" class="text-sm text-gray-300">...</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#121212] p-4 border border-gray-800 rounded mb-6">
+                        <h3 class="text-amber-500 text-xs uppercase font-bold mb-2">Listening Guide</h3>
+                        <p id="an-guide" class="text-sm text-gray-400 leading-relaxed">...</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-6 font-mono">
+                        <span id="spec-driver" class="border border-gray-800 px-2 py-1"></span>
+                        <span id="spec-year" class="border border-gray-800 px-2 py-1"></span>
+                    </div>
+                    <a id="spotify-link" href="#" target="_blank"
+                        class="block w-full bg-[#1DB954] hover:bg-[#1ed760] text-black font-bold py-4 text-center uppercase tracking-widest transition">Listen
+                        on Spotify</a>
+                </div>
             </div>
+        </div>
+
+        <div id="history-view" class="hidden fade-in w-full">
+            <h2 class="text-xl font-light text-center mb-6 text-gray-400 tracking-widest">SEARCH HISTORY</h2>
+            <div id="history-list" class="space-y-3">
+            </div>
+        </div>
+
+        <div id="collection-view" class="hidden fade-in w-full">
+            <h2 class="text-xl font-light text-center mb-6 text-amber-500 tracking-widest">COLLECTION</h2>
+            <div id="fav-list" class="space-y-4"></div>
         </div>
     </div>
 
     <script>
-        async function analyze() {
-            const brand = document.getElementById('brand').value;
-            const model = document.getElementById('model').value;
-            const btn = document.getElementById('btn');
+        let currentToken = localStorage.getItem('token') || "";
+        let currentTrackData = null;
+        let isRegisterMode = false;
+        let isFavorited = false;
 
-            if (!brand || !model) return alert("請輸入完整資訊");
+        if (currentToken) initApp();
 
-            btn.disabled = true;
-            btn.innerText = "分析中...";
-            document.getElementById('result-area').style.display = 'none';
+        function initApp() {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('nav-bar').classList.remove('hidden');
+            switchTab('search');
+        }
+
+        // --- Tab 切換邏輯 ---
+        function switchTab(tab) {
+            ['search', 'history', 'collection'].forEach(t => {
+                document.getElementById(`${t}-view`).classList.add('hidden');
+                const btn = document.getElementById(`nav-${t}`);
+                if (btn) {
+                    btn.classList.remove('text-amber-500', 'font-bold');
+                    btn.classList.add('text-gray-500');
+                }
+            });
+
+            document.getElementById(`${tab}-view`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${tab}`);
+            activeBtn.classList.remove('text-gray-500');
+            activeBtn.classList.add('text-amber-500', 'font-bold');
+
+            if (tab === 'collection') loadCollection();
+            if (tab === 'history') loadHistory();
+        }
+
+        // --- 載入歷史紀錄 ---
+        async function loadHistory() {
+            const list = document.getElementById('history-list');
+            list.innerHTML = '<p class="text-center text-gray-600">Loading history...</p>';
 
             try {
-                const res = await fetch('/recommend', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ brand, model })
-                });
-
-                if (!res.ok) throw new Error("API Error");
+                const res = await fetch('/history', { headers: { 'Authorization': `Bearer ${currentToken}` } });
                 const data = await res.json();
 
-                // 填寫規格
-                document.getElementById('spec-form').innerText = data.form_factor;
-                document.getElementById('spec-conn').innerText = data.connection;
-                document.getElementById('spec-year').innerText = data.release_year;
-                document.getElementById('spec-price').innerText = data.price_range;
-                document.getElementById('spec-driver').innerText = data.driver_config;
+                list.innerHTML = '';
+                if (data.length === 0) {
+                    list.innerHTML = '<p class="text-center text-gray-600">No search history yet.</p>';
+                    return;
+                }
 
-                // 填寫特色
-                const tags = document.getElementById('features-list');
-                tags.innerHTML = data.sound_features.map(f => `<span class="tag">${f}</span>`).join('');
+                data.forEach(item => {
+                    // 點擊歷史紀錄直接搜尋
+                    list.innerHTML += `
+                        <div onclick="restoreSearch('${item.brand}', '${item.model}')" class="bg-[#1e1e1e] p-4 border-l-4 border-gray-700 hover:border-amber-500 cursor-pointer transition group">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-gray-200 font-bold group-hover:text-amber-500 transition">${item.brand} ${item.model}</h3>
+                                    <p class="text-xs text-gray-500">${item.timestamp}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-gray-400">Result: ${item.result_song}</p>
+                                    <i class="fas fa-chevron-right text-gray-700 group-hover:text-amber-500 mt-1"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (e) { console.error(e); }
+        }
 
-                // 填寫歌曲與評論
-                document.getElementById('summary-text').innerText = data.comment;
-                document.getElementById('song-title').innerText = data.title;
-                document.getElementById('artist-name').innerText = data.artist;
-                document.getElementById('cover-img').src = data.cover_url;
+        // --- 從歷史還原搜尋 ---
+        function restoreSearch(brand, model) {
+            document.getElementById('brand').value = brand;
+            document.getElementById('model').value = model;
+            switchTab('search');
+            getRecommendation(); // 直接觸發搜尋 (如果有快取會秒開)
+        }
 
-                // 嵌入播放器
-                document.getElementById('spotify-embed').innerHTML = `
-                <iframe style="border-radius:12px" 
-                src="https://open.spotify.com/embed/track/${data.track_id}?utm_source=generator&theme=0" 
-                width="100%" height="152" frameBorder="0" allowfullscreen="" 
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                loading="lazy"></iframe>
-            `;
+        // --- 載入收藏 (Collection) ---
+        async function loadCollection() {
+            const list = document.getElementById('fav-list');
+            list.innerHTML = 'Loading...';
+            try {
+                const res = await fetch('/favorites', { headers: { 'Authorization': `Bearer ${currentToken}` } });
+                const data = await res.json();
+                list.innerHTML = '';
+                data.forEach(item => {
+                    list.innerHTML += `
+                        <div class="bg-[#1e1e1e] p-4 flex items-center space-x-4 border-b border-gray-800">
+                            <img src="${item.cover_url}" class="w-12 h-12 object-cover opacity-70">
+                            <div class="flex-1">
+                                <h3 class="text-amber-500 font-bold">${item.title}</h3>
+                                <p class="text-xs text-gray-500">${item.artist}</p>
+                            </div>
+                            <a href="${item.spotify_url}" target="_blank" class="text-[#1DB954] hover:text-white"><i class="fab fa-spotify text-xl"></i></a>
+                            <button onclick="deleteFavorite('${item.track_id}')" class="text-gray-600 hover:text-red-500 ml-3"><i class="fas fa-trash"></i></button>
+                        </div>`;
+                });
+            } catch (e) { }
+        }
 
-                document.getElementById('result-area').style.display = 'block';
+        // ... (其他的 Auth, getRecommendation, ToggleFavorite 函式請沿用上一版的 V4 黑金版，這部分邏輯不變) ...
+        // ... (務必確保 getRecommendation 有解析新的詳細分析欄位) ...
 
-            } catch (e) {
-                alert("分析失敗，可能是型號太冷門或連線錯誤");
-                console.error(e);
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "分析";
+        async function handleAuth() { /* 複製上一版 */
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const endpoint = isRegisterMode ? '/register' : '/token';
+            const body = isRegisterMode ? JSON.stringify({ email, password }) : new URLSearchParams({ username: email, password });
+            const headers = isRegisterMode ? { 'Content-Type': 'application/json' } : { 'Content-Type': 'application/x-www-form-urlencoded' };
+            try {
+                const res = await fetch(endpoint, { method: 'POST', headers, body });
+                const data = await res.json();
+                if (res.ok) {
+                    if (isRegisterMode) { alert("Success! Please Login."); toggleAuthMode(); }
+                    else { currentToken = data.access_token; localStorage.setItem('token', currentToken); initApp(); }
+                } else { alert(data.detail); }
+            } catch (e) { alert(e); }
+        }
+        function toggleAuthMode() {
+            isRegisterMode = !isRegisterMode;
+
+            // 取得 DOM 元素
+            const btn = document.getElementById('auth-btn');
+            const title = document.getElementById('auth-title');
+            const toggleText = document.getElementById('toggle-text'); // 抓取底下那行小字
+
+            if (isRegisterMode) {
+                // --- 切換到 註冊模式 ---
+                title.innerText = "REGISTER";
+                btn.innerText = "Create Account";
+                // ✅ 關鍵修正：這裡要改成「已有帳號？去登入」
+                toggleText.innerText = "Already have an account? Login";
+
+                // (選擇性) 按鈕變綠色，區分狀態
+                btn.classList.remove('gold-gradient');
+                btn.classList.add('bg-green-600', 'text-white');
+            } else {
+                // --- 切換到 登入模式 ---
+                title.innerText = "LOGIN";
+                btn.innerText = "Login";
+                // ✅ 關鍵修正：這裡要改成「還沒有帳號？去註冊」
+                toggleText.innerText = "Create an Account";
+
+                // 還原金屬色按鈕
+                btn.classList.remove('bg-green-600', 'text-white');
+                btn.classList.add('gold-gradient');
             }
         }
-    </script>
+        function logout() { localStorage.removeItem('token'); location.reload(); }
 
+        async function getRecommendation() {
+            const brand = document.getElementById('brand').value;
+            const model = document.getElementById('model').value;
+            const btn = document.getElementById('search-btn');
+            if (!brand || !model) return;
+            btn.innerHTML = 'Analyzing...'; btn.disabled = true;
+            try {
+                const res = await fetch('/recommend', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentToken}` }, body: JSON.stringify({ brand, model }) });
+                const data = await res.json();
+                currentTrackData = data;
+                document.getElementById('album-cover').src = data.cover_url;
+                document.getElementById('song-title').innerText = data.title;
+                document.getElementById('artist-name').innerText = data.artist;
+                document.getElementById('an-bass').innerText = data.analysis_bass;
+                document.getElementById('an-mids').innerText = data.analysis_mids;
+                document.getElementById('an-highs').innerText = data.analysis_highs;
+                document.getElementById('an-guide').innerText = data.listening_guide;
+                document.getElementById('spec-driver').innerText = data.driver_config;
+                document.getElementById('spec-year').innerText = data.release_year;
+                document.getElementById('spotify-link').href = data.spotify_url;
+                await checkFavoriteStatus(data.track_id);
+                document.getElementById('result-card').classList.remove('hidden');
+            } catch (e) { alert("Error: " + e); }
+            finally { btn.innerHTML = 'Analyze'; btn.disabled = false; }
+        }
+
+        async function deleteFavorite(id) { if (!confirm("Remove?")) return; await fetch(`/favorites/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${currentToken}` } }); loadCollection(); }
+        async function checkFavoriteStatus(id) {
+            try { const res = await fetch(`/favorites/check/${id}`, { headers: { 'Authorization': `Bearer ${currentToken}` } }); const d = await res.json(); isFavorited = d.is_favorited; updateFavBtn(); } catch (e) { }
+        }
+        function updateFavBtn() {
+            const btn = document.getElementById('fav-btn');
+            btn.className = isFavorited ? "absolute top-4 right-4 bg-red-600 text-white p-3 rounded-full text-2xl transition shadow-lg shadow-red-900/50" : "absolute top-4 right-4 bg-black/50 text-gray-400 p-3 rounded-full text-2xl transition hover:text-white";
+        }
+        async function toggleFavorite() {
+            if (!currentToken) return alert("Please Login");
+            const method = isFavorited ? 'DELETE' : 'POST';
+            const url = isFavorited ? `/favorites/${currentTrackData.track_id}` : '/favorites';
+            const body = isFavorited ? null : JSON.stringify({ track_id: currentTrackData.track_id, title: currentTrackData.title, artist: currentTrackData.artist, cover_url: currentTrackData.cover_url, spotify_url: currentTrackData.spotify_url });
+            await fetch(url, { method, headers: { 'Authorization': `Bearer ${currentToken}`, 'Content-Type': 'application/json' }, body });
+            isFavorited = !isFavorited;
+            updateFavBtn();
+        }
+    </script>
 </body>
 
 </html>
