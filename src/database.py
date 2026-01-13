@@ -1,31 +1,28 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import os
 from dotenv import load_dotenv
 
-# 1. 載入 .env 變數
 load_dotenv()
 
-# --- 關鍵修改 ---
-# 不要直接讀 DATABASE_URL (因為 .env 裡沒有這一行了)
-# 我們要用 f-string 把零散的變數組裝起來
-SQLALCHEMY_DATABASE_URL = (
-    f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-    f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-)
-# ----------------
+# 加上第二個參數作為「預設值」
+# 這樣就算 CI 沒設定 .env，也不會因為 None 而報錯
+POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "password")
+POSTGRES_SERVER = os.getenv("POSTGRES_SERVER", "localhost")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")  
+POSTGRES_DB = os.getenv("POSTGRES_DB", "audiophile_db")
 
-# 2. 建立 Engine
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+SQLALCHEMY_DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_SERVER}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
-# 3. 建立 Session 工廠
+# 注意：在測試環境中，如果連不到真實 DB，create_engine 可能還是會報錯
+# 但至少不會是 "int() argument must be a string" 這種低級錯誤
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# 4. 宣告 Base
 Base = declarative_base()
 
-# 5. Dependency
 def get_db():
     db = SessionLocal()
     try:
