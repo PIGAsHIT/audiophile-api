@@ -8,6 +8,16 @@ from src.core.config import settings
 client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
 async def analyze_headphone(brand: str, model: str):
+    try:
+        if not settings.GEMINI_API_KEY:
+            print("警告: 未設定 GEMINI_API_KEY")
+            return None
+            
+        client = genai.Client(api_key=settings.GEMINI_API_KEY)
+    except Exception as e:
+        print(f"Gemini Client 初始化失敗: {e}")
+        return None
+    
     prompt = f"""
     使用者正在查詢耳機：{brand} {model}。
     請扮演一位「想推別人入坑的耳機發燒友」，提供深度的聽感分析。

@@ -7,13 +7,11 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # --- 第一階段：執行測試 (CI) ---
   test:
     runs-on: ubuntu-latest
 
-    # 🟢 關鍵修改：一次啟動三個服務 (Postgres, Redis, Mongo)
     services:
-      # 1. PostgreSQL
+      # PostgreSQL Service
       postgres:
         image: postgres:15
         env:
@@ -22,14 +20,13 @@ jobs:
           POSTGRES_DB: test_db
         ports:
           - 5432:5432
-        # 健康檢查：等 DB 準備好再跑測試
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
-      # 2. Redis
+      # Redis Service
       redis:
         image: redis:7
         ports:
@@ -40,7 +37,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-      # 3. MongoDB
+      # MongoDB Service
       mongo:
         image: mongo:6
         env:
@@ -48,7 +45,6 @@ jobs:
           MONGO_INITDB_ROOT_PASSWORD: secret_mongo
         ports:
           - 27017:27017
-        # Mongo 6 的健康檢查比較龜毛，這裡用 mongosh ping
         options: >-
           --health-cmd "echo 'db.runCommand(\"ping\").ok' | mongosh localhost:27017/test --quiet"
           --health-interval 10s
@@ -67,35 +63,31 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          # 安裝專案依賴 + 測試工具 + 資料庫驅動
           pip install -r requirements.txt
-          pip install pytest httpx psycopg2-binary motor redis
+          pip install pytest httpx psycopg2-binary motor redis pytest-asyncio
 
       - name: Run Tests
-        # 🟢 設定環境變數讓 Python 連到上面的 Service
         env:
-          # Postgres 設定
+          # DB Configuration
           POSTGRES_USER: user
           POSTGRES_PASSWORD: password
           POSTGRES_SERVER: localhost
           POSTGRES_PORT: 5432
           POSTGRES_DB: test_db
-          
-          # Mongo 設定 (帳密要跟上面 mongo service 一樣)
           MONGO_USER: admin
           MONGO_PASSWORD: secret_mongo
           MONGO_HOST: localhost
           MONGO_PORT: 27017
-          
-          # Redis 設定
           REDIS_HOST: localhost
-          
-          # 其他
           SECRET_KEY: supersecretkeytesting
+          
+          # API Secrets (Injecting from GitHub Secrets)
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: |
           python -m pytest
 
-  # --- 第二階段：打包並上傳 Docker Hub (CD) ---
   build-and-push:
     needs: test
     runs-on: ubuntu-latest
@@ -117,7 +109,6 @@ jobs:
         with:
           context: .
           push: true
-          # ⚠️ 記得改回你的 Docker Hub 帳號
-          tags: yourusername/audiophile-backend:latest
+          tags: pigashit/audiophile-backend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
