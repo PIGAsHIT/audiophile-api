@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audiophile Proof - 黑金版</title>
+    <title>Audiophile Proof</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -141,7 +141,29 @@
         let isRegisterMode = false;
         let isFavorited = false;
 
-        if (currentToken) initApp();
+        if (currentToken) {
+            verifyTokenAndInit();
+        }
+
+        async function verifyTokenAndInit() {
+            try {
+                const res = await fetch('/history', {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+
+                if (res.ok) {
+                    // Token 有效，准許進入
+                    initApp();
+                } else {
+                    // Token 無效 (例如資料庫重置了)，自動清除並留在登入頁
+                    console.log("Token 失效 (Zombie Token)，自動登出");
+                    logout();
+                }
+            } catch (e) {
+                // 網路錯誤或其他異常，保險起見也登出
+                logout();
+            }
+        }
 
         function initApp() {
             document.getElementById('auth-section').classList.add('hidden');
@@ -235,8 +257,6 @@
             } catch (e) { }
         }
 
-        // ... (其他的 Auth, getRecommendation, ToggleFavorite 函式請沿用上一版的 V4 黑金版，這部分邏輯不變) ...
-        // ... (務必確保 getRecommendation 有解析新的詳細分析欄位) ...
 
         async function handleAuth() { /* 複製上一版 */
             const email = document.getElementById('email').value;

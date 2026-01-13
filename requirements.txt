@@ -27,7 +27,11 @@ python-jose[cryptography]
 passlib
 bcrypt==3.2.2
 python-multipart
+pydantic-settings==2.1.0
 
 # --- 測試工具 ---
 pytest
 pytest-asyncio
+
+# --- 監控工具 ---
+prometheus-fastapi-instrumentator

@@ -64,24 +64,21 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest httpx psycopg2-binary motor redis pytest-asyncio
 
       - name: Run Tests
         env:
-          # DB Configuration
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: password
-          POSTGRES_SERVER: localhost
-          POSTGRES_PORT: 5432
-          POSTGRES_DB: test_db
-          MONGO_USER: admin
-          MONGO_PASSWORD: secret_mongo
-          MONGO_HOST: localhost
-          MONGO_PORT: 27017
-          REDIS_HOST: localhost
-          SECRET_KEY: supersecretkeytesting
+          # 👇 修改這裡：對齊我們在 database.py 裡定義的新環境變數名稱
+          DB_USER: user
+          DB_PASS: password
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: test_db
           
-          # API Secrets (Injecting from GitHub Secrets)
+          # Mongo 也要對齊你程式內的變數名稱 (假設你改過)
+          MONGO_URL: mongodb://admin:secret_mongo@localhost:27017
+          REDIS_HOST: localhost
+          
+          SECRET_KEY: supersecretkeytesting
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
@@ -109,6 +106,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: pigashit/audiophile-backend:latest
+          tags: |
+            pigashit/audiophile-backend:latest
+            pigashit/audiophile-backend:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
