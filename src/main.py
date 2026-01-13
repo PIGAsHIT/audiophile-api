@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from src.database import engine, Base
-
 # 匯入拆分出去的 Routers
 from src.routers import auth, recommendation, user
 

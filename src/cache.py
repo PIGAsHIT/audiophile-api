@@ -5,10 +5,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# 讀取環境變數 (在 docker-compose 裡我們設為 redis://redis:6379/0)
+# 讀取環境變數 (在 docker-compose 裡設為 redis://redis:6379/0)
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 
-# 建立連線池 (Connection Pool) - 這是 DevOps 最佳實踐，避免每次請求都重連
+# 建立連線池 (Connection Pool) 
 pool = redis.ConnectionPool.from_url(REDIS_URL, decode_responses=True)
 client = redis.Redis(connection_pool=pool)
 

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# --- 資料庫連線設定 ---
+# 資料庫連線設定
 MONGO_USER = os.getenv("MONGO_USER", "admin")
 MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "secret_mongo")
 MONGO_HOST = os.getenv("MONGO_HOST", "localhost")

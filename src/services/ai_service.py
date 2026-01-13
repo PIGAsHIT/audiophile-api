@@ -4,7 +4,6 @@ from google import genai
 from google.genai import types
 from src.core.config import settings
 
-# 初始化 Client
 client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
 async def analyze_headphone(brand: str, model: str):
@@ -43,6 +42,6 @@ async def analyze_headphone(brand: str, model: str):
             return json.loads(resp.text)
         except Exception as e:
             print(f"Gemini Error: {e}")
-            if attempt == 2: return None # 失敗三次回傳 None
+            if attempt == 2: return None 
             time.sleep(1)
     return None
