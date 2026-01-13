@@ -64,3 +64,8 @@ terraform/.mongodb/
 # --- Logs ---
 *.log
 logs/
+
+# 排除 K8s 相關執行檔
+kubectl
+minikube-linux-amd64
+minikube
