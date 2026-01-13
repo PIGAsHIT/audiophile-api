@@ -5,7 +5,11 @@ services:
   # FastAPI 後端程式
   # =========================================
   backend:
-    build: .  # 這裡會讀取當前目錄的 Dockerfile 來打包
+
+    #build: .  # 這裡會讀取當前目錄的 Dockerfile 來打包
+
+    image: pigashit/audiophile-backend:latest
+
     container_name: audiophile_backend
     restart: always
     ports:
