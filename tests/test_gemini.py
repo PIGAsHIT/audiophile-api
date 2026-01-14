@@ -1,23 +1,26 @@
 import os
 import pytest
+import asyncio
 from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
 TEST_MODEL = "gemini-2.5-flash" 
 
 @pytest.mark.skipif(not GEMINI_API_KEY, reason="Skipping: GEMINI_API_KEY not found")
 @pytest.mark.asyncio
-def test_gemini_connection():
+async def test_gemini_connection(): # 💡 修正：加上 async
     client = genai.Client(api_key=GEMINI_API_KEY)
     
-    # Sennheiser HD800S 的經典音場測試
+    # 使用 Sennheiser HD800S 測試 AI 描述能力
     headphone_model = "Sennheiser HD800S"
     test_prompt = f"Explain the soundstage of {headphone_model} in one short sentence."
 
     try:
+        
         response = client.models.generate_content(
             model=TEST_MODEL, 
             contents=test_prompt

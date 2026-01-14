@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     # Redis
     REDIS_HOST: str = "localhost"
     REDIS_PORT: int = 6379
-    # 如果 redis 有密碼也可加上 REDIS_PASSWORD: Optional[str] = None
+    
 
     # --- 4. 外部 API 設定 ---
     GEMINI_API_KEY: Optional[str] = None
